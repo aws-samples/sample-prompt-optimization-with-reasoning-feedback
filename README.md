@@ -48,6 +48,8 @@ Our framework follows a systematic approach to optimize LLM performance:
    - Measure performance improvements
    - Incorporate successful changes and iterate
 
+You can reference the [notebook](./illustration_notebook_optimization_prompt.ipynb) for step-by-step execution.
+
 ## Getting Started
 
 ### Prerequisites
