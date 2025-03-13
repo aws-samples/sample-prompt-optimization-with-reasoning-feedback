@@ -1,0 +1,105 @@
+{
+  "prompt_template": "You are a Financial Services Assistant. Classify each customer inquiry into one of these categories:\nACKNOWLEDGMENT - For greetings and thanks\nPASSWORD_RESET - For password issues\nCONTACT_INFO_UPDATE - For updating contact information\nPIN_RESET - For PIN number issues\nTRANSACTION_STATUS - For questions about pending transactions\nAUTHENTICATION_SETUP - For setting up security features\nCARD_DISPUTE - For unauthorized charges or transaction problems\nESCALATION - For security issues and complex problems\nIN_SCOPE - For questions about our financial services\nOUT_OF_SCOPE - For unrelated topics\n\n### User Inquiry:\n${user_question}. Output format: Please output directly in json Output format: Respond with a JSON object containing two fields - \"prediction\" with the category name, and \"explanation\" with your reasoning for the classification. When you output JSON, ALWAYS start with ```json",
+  "test_cases": [
+    {
+      "user_question": "I need my secret code changed for the plastic rectangle I use at the money machine, and while you're at it, I want to make sure my mobile number is up to date so I get those little messages when I use it.",
+      "ground_truth": "PIN_RESET"
+    },
+    {
+      "user_question": "I noticed my digital banking access isn't working and I keep getting a message about verification failing. I already tried the reset link, but it didn't come to my email. By the way, I also got this strange text claiming to be from your bank asking for my details.",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "Hey! Just wondering what the status is on that application I submitted last week? The website still says 'processing' and I need to know if I should look elsewhere.",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "Someone keeps trying to withdraw cash using my account. There are three failed attempts at different ATMs across town yesterday. I still have my card but I'm traveling in Europe right now.",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "My wife and I just got our electronic statements, and we noticed several small payments to digital services we never signed up for. They're all under 5 dollars so we didn't notice them before. Are these legitimate fees or something else?",
+      "ground_truth": "CARD_DISPUTE"
+    },
+    {
+      "user_question": "The cash machine ate my card yesterday evening after I entered the wrong PIN three times. I have an important business trip tomorrow and absolutely need access to funds. What are my options at this point?",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "My daughter is going to college next month, and I want to add her as an authorized user on my account. She'll be across the country, so I want to make sure she has emergency access to funds.",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "I desperately need help! The system is telling me my checking account is negative 3,459.32, but I had over 7,000 in there yesterday! I don't see any withdrawals in my transaction history either!",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "Planning retirement soon and wondering if I should convert my traditional IRA to a Roth now or wait until next year when the new tax regulations take effect. What would you recommend?",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "I was going through my late father's paperwork and found what looks like an account statement from your bank from 15 years ago. Is there a way to check if the account is still active and if there are any funds in it?",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "My digital verification steps are taking forever and keep timing out. I tried setting up the face recognition and fingerprint access, but neither seems to work on my new phone.",
+      "ground_truth": "AUTHENTICATION_SETUP"
+    },
+    {
+      "user_question": "I'm trying to buy a car this weekend and need to increase my daily transfer limit temporarily. Also, can you tell me if my pre-approval is still valid or if I need to apply again?",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "Just received notification that my direct deposit account info was changed, but I didn't do this! Someone must have accessed my account. I need this fixed immediately before my paycheck arrives tomorrow.",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "Been trying to change my email address through the app, but it keeps saying 'verification failed.' I recently got married and changed my name legally, could that be causing the issue?",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "I followed that investment advice your advisor gave me last month, and I've lost nearly 40% of my portfolio value! This is completely unacceptable and I want to speak to a manager immediately.",
+      "ground_truth": "ESCALATION"
+    },
+    {
+      "user_question": "I'm getting charged a 12 dollar monthly fee on my checking account that was supposed to be free. I maintain the minimum balance and have direct deposit set up as required.",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "Someone used my card at three gas stations within an hour yesterday, but I was at work with my card in my wallet. The total charges are over 200 dollars.",
+      "ground_truth": "CARD_DISPUTE"
+    },
+    {
+      "user_question": "My son is studying abroad and needs emergency funds, but I can't seem to complete an international wire transfer through the app. It keeps giving an error about 'verification required'.",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "I sent money to my landlord using your payment system last week, but they claim they never received it. The money left my account though. Can you help trace this payment?",
+      "ground_truth": "TRANSACTION_STATUS"
+    },
+    {
+      "user_question": "I need to confirm some information about bitcoin mining profitability and whether your platform offers better rates than the competitors I've been looking at.",
+      "ground_truth": "OUT_OF_SCOPE"
+    },
+    {
+      "user_question": "Recently moved and need to update both my mailing address for statements and my physical address for security purposes. Also, I seem to be locked out of mobile banking since the move.",
+      "ground_truth": "CONTACT_INFO_UPDATE"
+    },
+    {
+      "user_question": "I logged in this morning and saw a 50 dollar 'account research fee' that I don't recognize. When I tried to dispute it through the app, I got locked out completely.",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "I'm in the process of buying a house and need documentation showing the source of my down payment funds. The mortgage company needs it by tomorrow.",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "Was looking at my credit score through your app and noticed it dropped 85 points suddenly. I don't see any new accounts or late payments. What's going on?",
+      "ground_truth": "IN_SCOPE"
+    },
+    {
+      "user_question": "kvjnksdjvn kjehrkahtkjehfasd gkjasdnhlaoeirya lakjsndgkjasnd. akjsdghkjasdng?",
+      "ground_truth": "OUT_OF_SCOPE"
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "prompt_template": "You are a Financial Services Assistant. Classify each customer inquiry into EXACTLY ONE of these categories:\n\nACKNOWLEDGMENT - For simple greetings and expressions of thanks only\nPASSWORD_RESET - For issues accessing online accounts due to forgotten passwords or login problems\nCONTACT_INFO_UPDATE - For updating email, phone number, address, or other personal information\nPIN_RESET - For issues with PIN numbers for cards, including requests for changes or forgotten PINs\nTRANSACTION_STATUS - For questions about specific pending transactions or transfers that have been initiated\nAUTHENTICATION_SETUP - For setting up or troubleshooting security features like fingerprint access, face ID, etc.\nCARD_DISPUTE - ONLY for unauthorized charges or fraudulent transactions the customer did not initiate\nESCALATION - For security breaches, account compromise, urgent time-sensitive issues, complex problems requiring manager intervention, or situations involving deceased account holders\nIN_SCOPE - For general financial services questions that don't fit other categories, including account fees, product information, and service requests\nOUT_OF_SCOPE - For topics completely unrelated to banking or financial services\n\n### Classification Priority Rules:\n1. If the inquiry involves ANY security concern or account compromise, classify as ESCALATION\n2. If the inquiry involves multiple issues, classify based on the most urgent/critical issue\n3. If the customer expresses urgency or dissatisfaction requiring manager attention, classify as ESCALATION\n4. Only use IN_SCOPE when the inquiry relates to financial services but doesn't fit any specific category\n\n### User Inquiry:\n${user_question}\n\n### Output Format: \nRespond with a JSON object containing exactly two fields:\n- \"prediction\": the single most appropriate category name\n- \"explanation\": your reasoning for the classification\n\nYour JSON response must begin with ```json and end with ```.",
+  "test_cases": [
+    {
+      "user_question": "I need my secret code changed for the plastic rectangle I use at the money machine, and while you're at it, I want to make sure my mobile number is up to date so I get those little messages when I use it.",
+      "ground_truth": "PIN_RESET",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves both a PIN reset and an update to contact information. While these are individually classified as PIN_RESET and CONTACT_INFO_UPDATE, the combination of security-related changes (PIN reset) and the expressed desire to ensure proper account notifications warrants escalation to ensure all changes are handled securely and correctly.",
+      "case_type": "llm_success",
+      "case_idx": 1,
+      "task_succeed": false
+    },
+    {
+      "user_question": "I noticed my digital banking access isn't working and I keep getting a message about verification failing. I already tried the reset link, but it didn't come to my email. By the way, I also got this strange text claiming to be from your bank asking for my details.",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves a potential security concern as the customer received a suspicious text message claiming to be from the bank asking for personal details. This indicates a possible phishing attempt, which is a serious security issue. Additionally, the customer is experiencing issues with digital banking access, which could be related to the suspicious activity. According to the classification priority rules, any security concern or account compromise should be classified as ESCALATION.",
+      "case_type": "llm_success",
+      "case_idx": 2,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Hey! Just wondering what the status is on that application I submitted last week? The website still says 'processing' and I need to know if I should look elsewhere.",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "TRANSACTION_STATUS",
+      "explanation": "The inquiry is about the status of a specific application that the customer submitted, which falls under questions about pending transactions or processes.",
+      "case_type": "llm_success",
+      "case_idx": 3,
+      "task_succeed": false
+    },
+    {
+      "user_question": "Someone keeps trying to withdraw cash using my account. There are three failed attempts at different ATMs across town yesterday. I still have my card but I'm traveling in Europe right now.",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves potential unauthorized access attempts on the customer's account, which is a security concern. Additionally, the customer is traveling abroad, adding urgency to the situation. According to the classification priority rules, any security concern or account compromise should be classified as ESCALATION.",
+      "case_type": "llm_success",
+      "case_idx": 4,
+      "task_succeed": true
+    },
+    {
+      "user_question": "My wife and I just got our electronic statements, and we noticed several small payments to digital services we never signed up for. They're all under 5 dollars so we didn't notice them before. Are these legitimate fees or something else?",
+      "ground_truth": "CARD_DISPUTE",
+      "prediction": "CARD_DISPUTE",
+      "explanation": "The inquiry involves unauthorized charges (small payments to digital services the customers did not sign up for), which aligns with the definition of a CARD_DISPUTE.",
+      "case_type": "llm_success",
+      "case_idx": 5,
+      "task_succeed": true
+    },
+    {
+      "user_question": "The cash machine ate my card yesterday evening after I entered the wrong PIN three times. I have an important business trip tomorrow and absolutely need access to funds. What are my options at this point?",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves an urgent situation where the customer's card has been retained by an ATM due to multiple incorrect PIN attempts, and the customer urgently needs access to funds for an important business trip. This situation requires immediate attention and likely manager intervention to resolve the issue promptly.",
+      "case_type": "llm_success",
+      "case_idx": 6,
+      "task_succeed": true
+    },
+    {
+      "user_question": "My daughter is going to college next month, and I want to add her as an authorized user on my account. She'll be across the country, so I want to make sure she has emergency access to funds.",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "IN_SCOPE",
+      "explanation": "The inquiry involves adding an authorized user to a financial account, which is a general financial services request that doesn't fit into any of the more specific categories listed.",
+      "case_type": "llm_success",
+      "case_idx": 7,
+      "task_succeed": true
+    },
+    {
+      "user_question": "I desperately need help! The system is telling me my checking account is negative 3,459.32, but I had over 7,000 in there yesterday! I don't see any withdrawals in my transaction history either!",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry indicates a significant discrepancy in the account balance without corresponding transactions, suggesting a potential security concern or account compromise. Additionally, the customer's expression of urgency and dissatisfaction necessitates immediate manager intervention.",
+      "case_type": "llm_success",
+      "case_idx": 8,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Planning retirement soon and wondering if I should convert my traditional IRA to a Roth now or wait until next year when the new tax regulations take effect. What would you recommend?",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "IN_SCOPE",
+      "explanation": "The inquiry is about a general financial services question regarding retirement planning and IRA conversion, which doesn't fit into any of the specific predefined categories but is still related to financial services.",
+      "case_type": "llm_success",
+      "case_idx": 9,
+      "task_succeed": true
+    },
+    {
+      "user_question": "I was going through my late father's paperwork and found what looks like an account statement from your bank from 15 years ago. Is there a way to check if the account is still active and if there are any funds in it?",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves a potentially sensitive situation regarding a deceased account holder. It requires special handling and may need manager intervention to verify the account status and handle any potential funds or legal implications.",
+      "case_type": "llm_success",
+      "case_idx": 10,
+      "task_succeed": true
+    },
+    {
+      "user_question": "My digital verification steps are taking forever and keep timing out. I tried setting up the face recognition and fingerprint access, but neither seems to work on my new phone.",
+      "ground_truth": "AUTHENTICATION_SETUP",
+      "prediction": "AUTHENTICATION_SETUP",
+      "explanation": "The inquiry is about setting up and troubleshooting security features like face recognition and fingerprint access, which directly relates to authentication setup.",
+      "case_type": "llm_success",
+      "case_idx": 11,
+      "task_succeed": true
+    },
+    {
+      "user_question": "I'm trying to buy a car this weekend and need to increase my daily transfer limit temporarily. Also, can you tell me if my pre-approval is still valid or if I need to apply again?",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "IN_SCOPE",
+      "explanation": "The inquiry involves a request to increase the daily transfer limit temporarily and a question about the validity of a pre-approval. Both of these are general financial services questions that don't fit into any of the more specific categories provided.",
+      "case_type": "llm_success",
+      "case_idx": 12,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Just received notification that my direct deposit account info was changed, but I didn't do this! Someone must have accessed my account. I need this fixed immediately before my paycheck arrives tomorrow.",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves a potential security breach and unauthorized changes to the account, which poses an immediate threat to the customer's financial security. Additionally, the customer has expressed urgency due to the imminent arrival of their paycheck, necessitating immediate attention and possible manager intervention.",
+      "case_type": "llm_success",
+      "case_idx": 13,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Been trying to change my email address through the app, but it keeps saying 'verification failed.' I recently got married and changed my name legally, could that be causing the issue?",
+      "ground_truth": "ESCALATION",
+      "prediction": "CONTACT_INFO_UPDATE",
+      "explanation": "The inquiry is about updating personal information, specifically the email address and potentially the name due to a legal name change. This falls under CONTACT_INFO_UPDATE as it involves changing personal details associated with the account.",
+      "case_type": "llm_success",
+      "case_idx": 14,
+      "task_succeed": false
+    },
+    {
+      "user_question": "I followed that investment advice your advisor gave me last month, and I've lost nearly 40% of my portfolio value! This is completely unacceptable and I want to speak to a manager immediately.",
+      "ground_truth": "ESCALATION",
+      "prediction": "ESCALATION",
+      "explanation": "The customer is expressing significant dissatisfaction and urgency due to substantial financial loss following advice from an advisor. This requires immediate attention from a manager.",
+      "case_type": "llm_success",
+      "case_idx": 15,
+      "task_succeed": true
+    },
+    {
+      "user_question": "I'm getting charged a 12 dollar monthly fee on my checking account that was supposed to be free. I maintain the minimum balance and have direct deposit set up as required.",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "IN_SCOPE",
+      "explanation": "The inquiry relates to a financial service (account fees) and does not fit into any of the more specific categories listed. It is a general question about the customer's checking account fees, which falls under general financial services questions.",
+      "case_type": "llm_success",
+      "case_idx": 16,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Someone used my card at three gas stations within an hour yesterday, but I was at work with my card in my wallet. The total charges are over 200 dollars.",
+      "ground_truth": "CARD_DISPUTE",
+      "prediction": "CARD_DISPUTE",
+      "explanation": "The inquiry specifically mentions unauthorized charges on the customer's card, which aligns directly with the definition of a CARD_DISPUTE. Although there is a significant amount involved, the primary concern here is the unauthorized use of the card, making CARD_DISPUTE the appropriate category.",
+      "case_type": "llm_success",
+      "case_idx": 17,
+      "task_succeed": true
+    },
+    {
+      "user_question": "My son is studying abroad and needs emergency funds, but I can't seem to complete an international wire transfer through the app. It keeps giving an error about 'verification required'.",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves an urgent situation where the customer is unable to complete an international wire transfer for emergency funds. The mention of an error about 'verification required' suggests a potential authentication or security issue that needs immediate attention. Additionally, the urgency expressed by the customer due to their son studying abroad and needing emergency funds warrants escalation to ensure the issue is resolved promptly.",
+      "case_type": "llm_success",
+      "case_idx": 18,
+      "task_succeed": false
+    },
+    {
+      "user_question": "I sent money to my landlord using your payment system last week, but they claim they never received it. The money left my account though. Can you help trace this payment?",
+      "ground_truth": "TRANSACTION_STATUS",
+      "prediction": "TRANSACTION_STATUS",
+      "explanation": "The inquiry is about a specific pending transaction (a payment sent to a landlord) that the customer needs help tracing. This directly fits the TRANSACTION_STATUS category as it involves a question about a specific transfer that has been initiated.",
+      "case_type": "llm_success",
+      "case_idx": 19,
+      "task_succeed": true
+    },
+    {
+      "user_question": "I need to confirm some information about bitcoin mining profitability and whether your platform offers better rates than the competitors I've been looking at.",
+      "ground_truth": "OUT_OF_SCOPE",
+      "prediction": "OUT_OF_SCOPE",
+      "explanation": "The inquiry is about bitcoin mining profitability and comparison with competitors, which is unrelated to traditional banking or financial services offered by the institution.",
+      "case_type": "llm_success",
+      "case_idx": 20,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Recently moved and need to update both my mailing address for statements and my physical address for security purposes. Also, I seem to be locked out of mobile banking since the move.",
+      "ground_truth": "CONTACT_INFO_UPDATE",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves updating critical contact and security information (addresses) along with an issue accessing the mobile banking service, which could be related to the recent move. Given the combination of security-related updates and the potential account access issue, this qualifies as an urgent matter requiring manager attention.",
+      "case_type": "llm_success",
+      "case_idx": 21,
+      "task_succeed": false
+    },
+    {
+      "user_question": "I logged in this morning and saw a 50 dollar 'account research fee' that I don't recognize. When I tried to dispute it through the app, I got locked out completely.",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "ESCALATION",
+      "explanation": "The inquiry involves a potential unauthorized charge ('account research fee') and the customer being locked out of their account while attempting to dispute it. This combination of a possible fraudulent transaction and account access issue indicates a security concern, making it critical to escalate the matter for immediate attention.",
+      "case_type": "llm_success",
+      "case_idx": 22,
+      "task_succeed": false
+    },
+    {
+      "user_question": "I'm in the process of buying a house and need documentation showing the source of my down payment funds. The mortgage company needs it by tomorrow.",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "IN_SCOPE",
+      "explanation": "The inquiry is related to financial services as it involves providing documentation for a down payment, which is a banking-related request. It doesn't fit into any of the more specific categories like PASSWORD_RESET or CARD_DISPUTE, so it is classified under IN_SCOPE.",
+      "case_type": "llm_success",
+      "case_idx": 23,
+      "task_succeed": true
+    },
+    {
+      "user_question": "Was looking at my credit score through your app and noticed it dropped 85 points suddenly. I don't see any new accounts or late payments. What's going on?",
+      "ground_truth": "IN_SCOPE",
+      "prediction": "IN_SCOPE",
+      "explanation": "The inquiry is about a sudden drop in the customer's credit score, which is a general financial services question. It doesn't fit into any of the specific categories like PASSWORD_RESET, PIN_RESET, etc., but it is clearly related to financial services.",
+      "case_type": "llm_success",
+      "case_idx": 24,
+      "task_succeed": true
+    },
+    {
+      "user_question": "kvjnksdjvn kjehrkahtkjehfasd gkjasdnhlaoeirya lakjsndgkjasnd. akjsdghkjasdng?",
+      "ground_truth": "OUT_OF_SCOPE",
+      "prediction": "OUT_OF_SCOPE",
+      "explanation": "The inquiry appears to be nonsensical and does not relate to any banking or financial services topic.",
+      "case_type": "llm_success",
+      "case_idx": 25,
+      "task_succeed": true
+    }
+  ],
+  "stats": {
+    "total": 25,
+    "llm_successful": 25,
+    "llm_fail": 0,
+    "task_succeed": 19
+  }
+}
