@@ -21,29 +21,31 @@ Supports flexible integration with different LLMs and custom feedback mechanisms
 
 ## How It Works
 
+![Solution deep dive](./images/how-it-works.png)
+
 Our framework follows a systematic approach to optimize LLM performance:
 
-1. **Initial Setup**
+- **Initial Setup**
    - Define task objectives and success criteria
    - Create prompt templates with clear instructions
    - Assemble evaluation datasets with ground truth labels
 
-2. **Performance Assessment**
+- **Point 1: Performance Assessment**
    - Test against ground truth data
    - Collect quantitative metrics and qualitative insights
    - Analyze misclassifications and decision explanations
 
-3. **Error Analysis**
+- **Point 2 & 3: Error Analysis**
    - Examine model explanations using structured reasoning
    - Identify root causes and systemic issues
    - Generate specific, actionable feedback
 
-4. **Prompt Refinement**
+- **Point 4: Prompt Refinement**
    - Implement targeted modifications based on reasoning feedback
    - Enhance instruction clarity and structure
    - Focus on improving the instruction layer
 
-5. **Continuous Improvement**
+- **Continuous Improvement**
    - Test refined prompts against evaluation data
    - Measure performance improvements
    - Incorporate successful changes and iterate
